@@ -1,5 +1,6 @@
 import click
 import os
+
 @click.command()
 @click.option('--file', '-f', type=click.Path(exists=True), required=True, help='File to read')
 @click.option('--ignore-case', '-i', is_flag=True, help='Ignore case when comparing lines')
@@ -43,4 +44,3 @@ def main(file, ignore_case, ucount, lines):
 
 if __name__ == "__main__":
     main()
-
