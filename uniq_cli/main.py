@@ -28,14 +28,14 @@ def main(file, ignore_case, ucount, lines):
                     line_count += 1
                 else:
                     if prev_line is not None:
-                        output = f"{line_count:>3} {prev_line}" if ucount else prev_line
+                        output = f"{line_count} {prev_line}" if ucount else prev_line
                         click.echo(output)
                     prev_line = line_stripped
                     prev_line_proc = line_proc
                     line_count = 1
 
         if prev_line is not None:
-            output = f"{line_count:>3} {prev_line}" if ucount else prev_line
+            output = f"{line_count} {prev_line}" if ucount else prev_line
             click.echo(output)
 
     except Exception as e:
