@@ -1,5 +1,5 @@
 import click
-from collections import Counter
+from collections import defaultdict
 
 @click.command()
 @click.option('--file', '-f', type=click.Path(exists=True), required=True, help='File to read')
@@ -10,7 +10,8 @@ def main(file, ignore_case, ucount, lines):
     """Uniq-like CLI counting all duplicates, not only consecutive ones."""
 
     try:
-        counter = Counter()
+        counter = defaultdict(int)
+        originals = {}  # щоб зберігати перший оригінальний варіант рядка
         read_count = 0
 
         with open(file, 'r', encoding='utf-8', errors='replace') as f:
@@ -20,11 +21,14 @@ def main(file, ignore_case, ucount, lines):
                 read_count += 1
 
                 line_stripped = line.rstrip('\n')
-                line_proc = line_stripped.lower() if ignore_case else line_stripped
-                counter[line_proc] += 1
+                key = line_stripped.lower() if ignore_case else line_stripped
 
-        for line_proc, count in counter.items():
-            output = f"{count} {line_proc}" if ucount else line_proc
+                counter[key] += 1
+                if key not in originals:
+                    originals[key] = line_stripped
+
+        for key, count in counter.items():
+            output = f"{count} {originals[key]}" if ucount else originals[key]
             click.echo(output)
 
     except Exception as e:
