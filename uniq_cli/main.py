@@ -10,7 +10,7 @@ def main(file, ignore_case, ucount, lines):
     """Uniq-like CLI counting all duplicates, not only consecutive ones."""
     try:
         counter = defaultdict(int)
-        originals = {}  
+        originals = {} 
         read_count = 0
 
         click.echo(f"Debug: Reading file '{file}' with ignore_case={ignore_case}, ucount={ucount}, lines={lines}")
@@ -21,9 +21,12 @@ def main(file, ignore_case, ucount, lines):
                     break
                 read_count += 1
                 line_stripped = line.rstrip('\r\n').strip()
-                click.echo(f"Debug: Line {read_count}: '{line_stripped}'")
-                key = line_stripped.lower() if ignore_case else line_stripped
-                click.echo(f"Debug: Key='{key}'")
+                if not line_stripped:  
+                    continue
+                key = ' '.join(line_stripped.split()) if ignore_case else line_stripped
+                if ignore_case:
+                    key = key.lower()
+                click.echo(f"Debug: Line {read_count}: '{line_stripped}', Key='{key}'")
                 counter[key] += 1
                 if key not in originals:
                     originals[key] = line_stripped
